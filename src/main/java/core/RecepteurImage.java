@@ -27,7 +27,7 @@ public class RecepteurImage {
 	private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
 
 	private static final String DEFAULT_USERNAME = "jmsuser";
-	private static final String DEFAULT_PASSWORD = "jmsepul98!";
+	private static final String DEFAULT_PASSWORD = "jmsepul98";
 
 	public static void main(String[] args) throws Exception {
 
@@ -46,7 +46,7 @@ public class RecepteurImage {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
 			ctxt = JBossContext.getInitialContext();
-			// On construit l'environnemenent à partir
+			// On construit l'environnemenent ï¿½ partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
 					"connection.factory", DEFAULT_CONNECTION_FACTORY);
@@ -64,7 +64,7 @@ public class RecepteurImage {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On crée la connexion JMS , session, producteur et message;
+			// On crï¿½e la connexion JMS , session, producteur et message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -78,7 +78,7 @@ public class RecepteurImage {
             BytesMessage bm = (BytesMessage)consommateur.receive(1000);
             File file = new File("D:\\images\\image.png");
             FileOutputStream fos = new FileOutputStream(file);
-            System.out.println("fichier créé");
+            System.out.println("fichier crï¿½ï¿½");
             BufferedOutputStream outBuf = new BufferedOutputStream(fos);
             int i;
             while((i=bm.readInt())!=-1){
@@ -88,7 +88,7 @@ public class RecepteurImage {
             fos.close();           
             connection.stop();
             connection.close();
-            System.out.println("L'image a bien été reçue, il est possible de la voir");
+            System.out.println("L'image a bien ï¿½tï¿½ reï¿½ue, il est possible de la voir");
             // pour Linux on utilise eog pour visualiser une image
             //process.exec("eog /home/uburoi/test.PNG" );
             // Pour XP on peut utiliser PictureViewer de Quicktime

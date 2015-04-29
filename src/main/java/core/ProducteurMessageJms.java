@@ -22,7 +22,7 @@ public class ProducteurMessageJms {
 	private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
 
 	private static final String DEFAULT_USERNAME = "jmsuser";
-	private static final String DEFAULT_PASSWORD = "jmsepul98!";
+	private static final String DEFAULT_PASSWORD = "jmsepul98";
 
 	@SuppressWarnings("finally")
 	public static int envoiMessage() throws JMSException, NamingException {
@@ -39,7 +39,7 @@ public class ProducteurMessageJms {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
 			ctxt = JBossContext.getInitialContext();
-			// On construit l'environnemenent à partir
+			// On construit l'environnemenent ï¿½ partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
 					"connection.factory", DEFAULT_CONNECTION_FACTORY);
@@ -57,7 +57,7 @@ public class ProducteurMessageJms {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On crée la connexion JMS , session, producteur et message;
+			// On crï¿½e la connexion JMS , session, producteur et message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -67,12 +67,12 @@ public class ProducteurMessageJms {
 			connection.start();
 			// Send the specified number of messages
 			String monTexte = "";
-			System.out.println("Saisir un message (Vide pour arrêter) : ");
+			System.out.println("Saisir un message (Vide pour arrï¿½ter) : ");
 			monTexte = Clavier.lectureChaine();
 			while (monTexte.compareTo("") > 0) {
 				message.setText(monTexte);
 				producteur.send(message);
-				System.out.println("Saisir un message (Vide pour arrêter) : ");
+				System.out.println("Saisir un message (Vide pour arrï¿½ter) : ");
 				monTexte = Clavier.lectureChaine();
 				nbm++;
 			}

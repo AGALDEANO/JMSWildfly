@@ -27,7 +27,7 @@ public class ProducteurImageJms {
 	private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
 
 	private static final String DEFAULT_USERNAME = "jmsuser";
-	private static final String DEFAULT_PASSWORD = "jmsepul98!";
+	private static final String DEFAULT_PASSWORD = "jmsepul98";
 
    private static String chemin = "D:\\epul\\myeclipsejms\\images\\";
 	@SuppressWarnings("finally")
@@ -47,7 +47,7 @@ public class ProducteurImageJms {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
 			ctxt = JBossContext.getInitialContext();
-			// On construit l'environnemenent à partir
+			// On construit l'environnemenent ï¿½ partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
 					"connection.factory", DEFAULT_CONNECTION_FACTORY);
@@ -65,7 +65,7 @@ public class ProducteurImageJms {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On crée la connexion JMS , session, producteur et message;
+			// On crï¿½e la connexion JMS , session, producteur et message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -76,7 +76,7 @@ public class ProducteurImageJms {
 			// Send the specified number of messages
 			String  nomf = "oiseau1.PNG";
 	 	       File f = new File(chemin+nomf);
-	 	       // on transfére les octets du fichier dans un messageByte
+	 	       // on transfï¿½re les octets du fichier dans un messageByte
 	 	       BytesMessage bm = session.createBytesMessage();
 	 	       InputStream in= new FileInputStream(f);
 	 	       BufferedInputStream inBuf= new BufferedInputStream(in);

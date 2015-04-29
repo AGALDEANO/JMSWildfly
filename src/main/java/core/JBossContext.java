@@ -9,7 +9,7 @@ import javax.naming.NamingException;
 public class JBossContext {
 
 	private static final String DEFAULT_USERNAME = "jmsuser";
-	private static final String DEFAULT_PASSWORD = "jmsepul98!";
+	private static final String DEFAULT_PASSWORD = "jmsepul98";
 	private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
 	private static final String PROVIDER_URL = "http-remoting://localhost:8080";
 
