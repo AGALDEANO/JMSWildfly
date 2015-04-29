@@ -1,4 +1,4 @@
-package message;
+package core.message;
 
 import javax.jms.JMSException;
 import javax.naming.NamingException;

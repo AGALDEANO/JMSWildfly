@@ -1,4 +1,4 @@
-package image;
+package core.image;
 
 import javax.jms.JMSException;
 import javax.naming.NamingException;
@@ -17,10 +17,10 @@ public class Demarrage {
 		try {
 			nbm = ProducteurImageJms.envoiImage();
 			System.out.println("Nombre de messages envoyés : " + nbm);
-			System.out.println("EL'image a été envoyée ");
-			// production de message de type image
+			System.out.println("EL'core.image a été envoyée ");
+			// production de core.message de type core.image
 
-			System.out.println("Pour voir si l'image a été bien reçue :");
+			System.out.println("Pour voir si l'core.image a été bien reçue :");
 			System.out.println(" Contrôlez <install_dir>/domains/domain1/logs/server.log.");
 
 		} catch (JMSException e) {

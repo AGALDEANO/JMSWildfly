@@ -1,4 +1,6 @@
-package image;
+package core.image;
+
+import core.JBossContext;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -65,7 +67,7 @@ public class ProducteurImageJms {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On cr�e la connexion JMS , session, producteur et message;
+			// On cr�e la connexion JMS , session, producteur et core.message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -88,7 +90,7 @@ public class ProducteurImageJms {
 			// on ajoute un eof
 			bm.writeInt(-1);
             
-			// production du message de type image
+			// production du core.message de type core.image
 			producteur.send(bm);
 			nbm++;
 

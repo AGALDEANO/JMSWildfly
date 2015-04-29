@@ -1,4 +1,4 @@
-package message;
+package core.message;
 
 import java.util.logging.Logger;
 
@@ -6,17 +6,17 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.MessageProducer;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-public class ProducteurMessageJms {
-	private static final Logger log = Logger
-			.getLogger(ProducteurMessageJms.class.getName());
+public class Recepteur {
 
-	// Set up all the default values
+	private static final Logger log = Logger.getLogger(Recepteur.class
+			.getName());
 
 	private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
 	private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
@@ -24,21 +24,22 @@ public class ProducteurMessageJms {
 	private static final String DEFAULT_USERNAME = "jmsuser";
 	private static final String DEFAULT_PASSWORD = "jmsepul98";
 
-	@SuppressWarnings("finally")
-	public static int envoiMessage() throws JMSException, NamingException {
+	public static void main(String[] args) throws Exception {
 
+		// TODO Auto-generated method stub
 		ConnectionFactory connectionFactory = null;
 		Connection connection = null;
 		Session session = null;
-		MessageProducer producteur = null;
+		MessageConsumer consommateur = null;
 		Destination destination = null;
-		TextMessage message = null;
+		TextMessage textmessage = null;
 		Context ctxt = null;
-		int nbm = 0;
+		Message message = null;
+
 		try {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
-			ctxt = JBossContext.getInitialContext();
+			ctxt = consommateur.JBossContext.getInitialContext();
 			// On construit l'environnemenent à partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
@@ -57,34 +58,38 @@ public class ProducteurMessageJms {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On crée la connexion JMS , session, producteur et message;
+			// On crée la connexion JMS , session, producteur et core.message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			producteur = session.createProducer(destination);
-			message = session.createTextMessage();
+
+			consommateur = session.createConsumer(destination);
+
 			connection.start();
-			// Send the specified number of messages
-			String monTexte = "";
-			System.out.println("Saisir un message (Vide pour arrêter) : ");
-			monTexte = Clavier.lectureChaine();
-			while (monTexte.compareTo("") > 0) {
-				message.setText(monTexte);
-				producteur.send(message);
-				System.out.println("Saisir un message (Vide pour arrêter) : ");
-				monTexte = Clavier.lectureChaine();
-				nbm++;
+			System.out.println("Début de la réception des messages !");
+			// bloque la réception pendant 1000 ms
+			message = consommateur.receive(1000);
+			while (message != null) {
+				if (message instanceof TextMessage) {
+					textmessage = (TextMessage) message;
+					System.out.println("Message reçu : "
+							+ textmessage.getText());
+				}
+				message = (TextMessage) consommateur.receive(1000);
 			}
+			connection.stop();
+			connection.close();
+
 		} catch (JMSException e) {
 			log.severe(e.getMessage());
-			throw e;
+			System.out.println("erreur : " + e.getMessage());
 		} catch (NamingException e) {
 			log.severe(e.getMessage());
-			throw e;
+			System.out.println("erreur : " + e.getMessage());
 		} catch (Exception e) {
 			log.severe(e.getMessage());
-			throw e;
+			System.out.println("erreur : " + e.getMessage());
 		}
 
 		finally {
@@ -97,7 +102,8 @@ public class ProducteurMessageJms {
 			if (connection != null) {
 				connection.close();
 			}
-			return nbm;
 		}
+
 	}
+
 }

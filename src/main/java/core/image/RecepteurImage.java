@@ -1,4 +1,4 @@
-package consommateur;
+package core.image;
 
 import java.util.logging.Logger;
 
@@ -12,10 +12,15 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.NamingException;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.jms.BytesMessage;
 
-public class Recepteur {
 
-	private static final Logger log = Logger.getLogger(Recepteur.class
+public class RecepteurImage {
+
+	private static final Logger log = Logger.getLogger(RecepteurImage.class
 			.getName());
 
 	private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
@@ -23,6 +28,9 @@ public class Recepteur {
 
 	private static final String DEFAULT_USERNAME = "jmsuser";
 	private static final String DEFAULT_PASSWORD = "jmsepul98";
+
+	private static String path1 = "/Users/benoitvuillemin/Desktop/core.image.png";
+	private static String path2 = "core/image/core.image.png";
 
 	public static void main(String[] args) throws Exception {
 
@@ -35,12 +43,13 @@ public class Recepteur {
 		TextMessage textmessage = null;
 		Context ctxt = null;
 		Message message = null;
+		Runtime process = Runtime.getRuntime();
 
 		try {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
-			ctxt = JBossContext.getInitialContext();
-			// On construit l'environnemenent à partir
+			ctxt = consommation.JBossContext.getInitialContext();
+			// On construit l'environnemenent � partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
 					"connection.factory", DEFAULT_CONNECTION_FACTORY);
@@ -58,7 +67,7 @@ public class Recepteur {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On crée la connexion JMS , session, producteur et message;
+			// On cr�e la connexion JMS , session, producteur et core.message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -67,23 +76,33 @@ public class Recepteur {
 			consommateur = session.createConsumer(destination);
 
 			connection.start();
-			System.out.println("Début de la réception des messages !");
-			// bloque la réception pendant 1000 ms
-			message = consommateur.receive(1000);
-			while (message != null) {
-				if (message instanceof TextMessage) {
-					textmessage = (TextMessage) message;
-					System.out.println("Message reçu : "
-							+ textmessage.getText());
-				}
-				message = (TextMessage) consommateur.receive(1000);
-			}
+			
+			System.out.println("connexion");
+            BytesMessage bm = (BytesMessage)consommateur.receive(1000);
+            File file = new File(System.getenv("OS").contains("Win") ? path2 : path1);
+			file.getParentFile().mkdirs();
+            FileOutputStream fos = new FileOutputStream(file);
+            System.out.println("fichier créé");
+            BufferedOutputStream outBuf = new BufferedOutputStream(fos);
+            int i;
+            while((i=bm.readInt())!=-1){
+               outBuf.write(i);
+            }
+            outBuf.close();
+            fos.close();           
+            connection.stop();
+            connection.close();
+            System.out.println("L'core.image a bien été reçue, il est possible de la voir");
+            // pour Linux on utilise eog pour visualiser une core.image
+            //process.exec("eog /home/uburoi/test.PNG" );
+            // Pour XP on peut utiliser PictureViewer de Quicktime
+            //process.exec("C:\\Windows\\System32\\mspaint D:\\images\\core.image.png") ;
+            } catch (JMSException e) {
+            System.out.println("Exception occurred: " + e.toString());
+
 			connection.stop();
 			connection.close();
 
-		} catch (JMSException e) {
-			log.severe(e.getMessage());
-			System.out.println("erreur : " + e.getMessage());
 		} catch (NamingException e) {
 			log.severe(e.getMessage());
 			System.out.println("erreur : " + e.getMessage());
