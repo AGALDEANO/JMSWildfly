@@ -30,6 +30,9 @@ public class RecepteurImage {
 	private static final String DEFAULT_USERNAME = "jmsuser";
 	private static final String DEFAULT_PASSWORD = "jmsepul98";
 
+	private static String path1 = "/Users/benoitvuillemin/Desktop/image.png";
+	private static String path2 = "./image/image.png";
+
 	public static void main(String[] args) throws Exception {
 
 		// TODO Auto-generated method stub
@@ -77,9 +80,10 @@ public class RecepteurImage {
 			
 			System.out.println("connexion");
             BytesMessage bm = (BytesMessage)consommateur.receive(1000);
-            File file = new File("/Users/benoitvuillemin/Desktop/image.png");
+            File file = new File(System.getenv("OS").contains("Win") ? path2 : path1);
+			file.getParentFile().mkdirs();
             FileOutputStream fos = new FileOutputStream(file);
-            System.out.println("fichier cr��");
+            System.out.println("fichier créé");
             BufferedOutputStream outBuf = new BufferedOutputStream(fos);
             int i;
             while((i=bm.readInt())!=-1){
@@ -89,7 +93,7 @@ public class RecepteurImage {
             fos.close();           
             connection.stop();
             connection.close();
-            System.out.println("L'image a bien �t� re�ue, il est possible de la voir");
+            System.out.println("L'image a bien été reçue, il est possible de la voir");
             // pour Linux on utilise eog pour visualiser une image
             //process.exec("eog /home/uburoi/test.PNG" );
             // Pour XP on peut utiliser PictureViewer de Quicktime
