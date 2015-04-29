@@ -1,4 +1,4 @@
-package core;
+package message;
 
 import java.util.logging.Logger;
 
@@ -6,17 +6,17 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-public class Recepteur {
+public class ProducteurMessageJms {
+	private static final Logger log = Logger
+			.getLogger(ProducteurMessageJms.class.getName());
 
-	private static final Logger log = Logger.getLogger(Recepteur.class
-			.getName());
+	// Set up all the default values
 
 	private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
 	private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
@@ -24,18 +24,17 @@ public class Recepteur {
 	private static final String DEFAULT_USERNAME = "jmsuser";
 	private static final String DEFAULT_PASSWORD = "jmsepul98";
 
-	public static void main(String[] args) throws Exception {
+	@SuppressWarnings("finally")
+	public static int envoiMessage() throws JMSException, NamingException {
 
-		// TODO Auto-generated method stub
 		ConnectionFactory connectionFactory = null;
 		Connection connection = null;
 		Session session = null;
-		MessageConsumer consommateur = null;
+		MessageProducer producteur = null;
 		Destination destination = null;
-		TextMessage textmessage = null;
+		TextMessage message = null;
 		Context ctxt = null;
-		Message message = null;
-
+		int nbm = 0;
 		try {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
@@ -63,33 +62,29 @@ public class Recepteur {
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-			consommateur = session.createConsumer(destination);
-
+			producteur = session.createProducer(destination);
+			message = session.createTextMessage();
 			connection.start();
-			System.out.println("D�but de la r�ception des messages !");
-			// bloque la r�ception pendant 1000 ms
-			message = consommateur.receive(1000);
-			while (message != null) {
-				if (message instanceof TextMessage) {
-					textmessage = (TextMessage) message;
-					System.out.println("Message re�u : "
-							+ textmessage.getText());
-				}
-				message = (TextMessage) consommateur.receive(1000);
+			// Send the specified number of messages
+			String monTexte = "";
+			System.out.println("Saisir un message (Vide pour arr�ter) : ");
+			monTexte = Clavier.lectureChaine();
+			while (monTexte.compareTo("") > 0) {
+				message.setText(monTexte);
+				producteur.send(message);
+				System.out.println("Saisir un message (Vide pour arr�ter) : ");
+				monTexte = Clavier.lectureChaine();
+				nbm++;
 			}
-			connection.stop();
-			connection.close();
-
 		} catch (JMSException e) {
 			log.severe(e.getMessage());
-			System.out.println("erreur : " + e.getMessage());
+			throw e;
 		} catch (NamingException e) {
 			log.severe(e.getMessage());
-			System.out.println("erreur : " + e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			log.severe(e.getMessage());
-			System.out.println("erreur : " + e.getMessage());
+			throw e;
 		}
 
 		finally {
@@ -102,8 +97,7 @@ public class Recepteur {
 			if (connection != null) {
 				connection.close();
 			}
+			return nbm;
 		}
-
 	}
-
 }

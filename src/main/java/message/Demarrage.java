@@ -1,4 +1,4 @@
-package core;
+package message;
 
 import javax.jms.JMSException;
 import javax.naming.NamingException;
@@ -12,11 +12,11 @@ public class Demarrage {
 	public static void main(String[] args) throws JMSException {
 		// TODO Auto-generated method stub
 		int nbm;
-		System.out.println("Je démarre  ");
+		System.out.println("Je dï¿½marre  ");
 			
 		try {
-			nbm=ProducteurMessageJms.envoiMessage();
-			System.out.println("Nombre de messages envoyés : " + nbm);
+			nbm= ProducteurMessageJms.envoiMessage();
+			System.out.println("Nombre de messages envoyï¿½s : " + nbm);
 		}
 		catch (JMSException e) {
 			// TODO Auto-generated catch block
