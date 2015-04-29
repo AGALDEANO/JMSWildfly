@@ -39,7 +39,7 @@ public class ProducteurMessageJms {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
 			ctxt = JBossContext.getInitialContext();
-			// On construit l'environnemenent � partir
+			// On construit l'environnemenent à partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
 					"connection.factory", DEFAULT_CONNECTION_FACTORY);
@@ -57,7 +57,7 @@ public class ProducteurMessageJms {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On cr�e la connexion JMS , session, producteur et message;
+			// On crée la connexion JMS , session, producteur et message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -67,12 +67,12 @@ public class ProducteurMessageJms {
 			connection.start();
 			// Send the specified number of messages
 			String monTexte = "";
-			System.out.println("Saisir un message (Vide pour arr�ter) : ");
+			System.out.println("Saisir un message (Vide pour arrêter) : ");
 			monTexte = Clavier.lectureChaine();
 			while (monTexte.compareTo("") > 0) {
 				message.setText(monTexte);
 				producteur.send(message);
-				System.out.println("Saisir un message (Vide pour arr�ter) : ");
+				System.out.println("Saisir un message (Vide pour arrêter) : ");
 				monTexte = Clavier.lectureChaine();
 				nbm++;
 			}

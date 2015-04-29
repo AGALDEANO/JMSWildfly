@@ -40,7 +40,7 @@ public class Recepteur {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
 			ctxt = JBossContext.getInitialContext();
-			// On construit l'environnemenent � partir
+			// On construit l'environnemenent à partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
 					"connection.factory", DEFAULT_CONNECTION_FACTORY);
@@ -58,7 +58,7 @@ public class Recepteur {
 			destination = (Destination) ctxt.lookup(destinationString);
 			log.info("Found destination \"" + destinationString + "\" in JNDI");
 
-			// On cr�e la connexion JMS , session, producteur et message;
+			// On crée la connexion JMS , session, producteur et message;
 			connection = connectionFactory.createConnection(
 					System.getProperty("username", DEFAULT_USERNAME),
 					System.getProperty("password", DEFAULT_PASSWORD));
@@ -67,13 +67,13 @@ public class Recepteur {
 			consommateur = session.createConsumer(destination);
 
 			connection.start();
-			System.out.println("D�but de la r�ception des messages !");
-			// bloque la r�ception pendant 1000 ms
+			System.out.println("Début de la réception des messages !");
+			// bloque la réception pendant 1000 ms
 			message = consommateur.receive(1000);
 			while (message != null) {
 				if (message instanceof TextMessage) {
 					textmessage = (TextMessage) message;
-					System.out.println("Message re�u : "
+					System.out.println("Message reçu : "
 							+ textmessage.getText());
 				}
 				message = (TextMessage) consommateur.receive(1000);
