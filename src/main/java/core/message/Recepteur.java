@@ -1,5 +1,7 @@
 package core.message;
 
+import core.JBossContext;
+
 import java.util.logging.Logger;
 
 import javax.jms.Connection;
@@ -39,7 +41,7 @@ public class Recepteur {
 		try {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
-			ctxt = consommateur.JBossContext.getInitialContext();
+			ctxt = JBossContext.getInitialContext();
 			// On construit l'environnemenent à partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(

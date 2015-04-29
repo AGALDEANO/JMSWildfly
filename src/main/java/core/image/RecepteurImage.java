@@ -1,5 +1,7 @@
 package core.image;
 
+import core.JBossContext;
+
 import java.util.logging.Logger;
 
 import javax.jms.Connection;
@@ -48,7 +50,7 @@ public class RecepteurImage {
 		try {
 			// On charge le contexte pour une recherche dans l'annuaire JNDI
 
-			ctxt = consommation.JBossContext.getInitialContext();
+			ctxt = JBossContext.getInitialContext();
 			// On construit l'environnemenent � partir
 			// des recherches JNDI
 			String connectionFactoryString = System.getProperty(
